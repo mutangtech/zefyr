@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:notus/notus.dart';
 
+import 'align.dart';
 import 'code.dart';
 import 'common.dart';
 import 'controller.dart';
@@ -229,6 +230,9 @@ class _ZefyrEditableTextState extends State<ZefyrEditableText>
     if (node is LineNode) {
       if (node.hasEmbed) {
         return new RawZefyrLine(node: node);
+      } else if (node.style.contains(NotusAttribute.align)) {
+        /// render align first
+        return ZefyrAlign(node: node);
       } else if (node.style.contains(NotusAttribute.heading)) {
         return new ZefyrHeading(node: node);
       }
