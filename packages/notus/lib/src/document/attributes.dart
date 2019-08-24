@@ -69,6 +69,8 @@ abstract class NotusAttributeBuilder<T> implements NotusAttributeKey<T> {
 ///   * [NotusAttribute.link]
 ///   * [NotusAttribute.heading]
 ///   * [NotusAttribute.block]
+///   * [NotusAttribute.embed]
+///   * [NotusAttribute.align]
 class NotusAttribute<T> implements NotusAttributeBuilder<T> {
   static final Map<String, NotusAttributeBuilder> _registry = {
     NotusAttribute.bold.key: NotusAttribute.bold,
@@ -77,6 +79,7 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
     NotusAttribute.heading.key: NotusAttribute.heading,
     NotusAttribute.block.key: NotusAttribute.block,
     NotusAttribute.embed.key: NotusAttribute.embed,
+    NotusAttribute.align.key: NotusAttribute.align,
   };
 
   // Inline attributes
@@ -94,6 +97,9 @@ class NotusAttribute<T> implements NotusAttributeBuilder<T> {
 
   /// Heading style attribute.
   static const heading = const HeadingAttributeBuilder._();
+
+//  /// Align style attribute.
+  static const align = const AlignAttributeBuilder._();
 
   /// Alias for [NotusAttribute.heading.level1].
   static NotusAttribute<int> get h1 => heading.level1;
@@ -352,6 +358,22 @@ class HeadingAttributeBuilder extends NotusAttributeBuilder<int> {
 
   /// Level 3 heading, equivalent of `H3` in HTML.
   NotusAttribute<int> get level3 => new NotusAttribute<int>._(key, scope, 3);
+}
+
+///// [NotusAttribute.align] instead.
+class AlignAttributeBuilder extends NotusAttributeBuilder<String> {
+  static const _kHeading = 'align';
+
+  const AlignAttributeBuilder._() : super._(_kHeading, NotusAttributeScope.line);
+
+  /// Level 1 heading, equivalent of `H1` in HTML.
+  NotusAttribute<String> get left => NotusAttribute<String>._(key, scope, 'left');
+
+  /// Level 2 heading, equivalent of `H2` in HTML.
+  NotusAttribute<String> get center => NotusAttribute<String>._(key, scope, 'center');
+
+  /// Level 3 heading, equivalent of `H3` in HTML.
+  NotusAttribute<String> get right => NotusAttribute<String>._(key, scope, 'right');
 }
 
 /// Builder for block attribute styles (number/bullet lists, code and quote).

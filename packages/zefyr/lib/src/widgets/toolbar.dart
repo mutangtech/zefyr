@@ -16,6 +16,7 @@ enum ZefyrToolbarAction {
   undo,
   indent,
   lineBreak,
+  center,
   bold,
   italic,
   link,
@@ -40,6 +41,7 @@ enum ZefyrToolbarAction {
 }
 
 final kZefyrToolbarAttributeActions = <ZefyrToolbarAction, NotusAttributeKey>{
+  ZefyrToolbarAction.center: NotusAttribute.align.center,
   ZefyrToolbarAction.bold: NotusAttribute.bold,
   ZefyrToolbarAction.italic: NotusAttribute.italic,
   ZefyrToolbarAction.link: NotusAttribute.link,
@@ -257,7 +259,8 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
       buildButton(context, ZefyrToolbarAction.undo),
       buildButton(context, ZefyrToolbarAction.indent),
       buildButton(context, ZefyrToolbarAction.lineBreak),
-      
+      buildButton(context, ZefyrToolbarAction.center),
+
       buildButton(context, ZefyrToolbarAction.bold),
       buildButton(context, ZefyrToolbarAction.italic),
       LinkButton(),
@@ -346,13 +349,16 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     ZefyrToolbarAction.undo: Icons.undo,
     ZefyrToolbarAction.indent: Icons.format_indent_increase,
     ZefyrToolbarAction.lineBreak: Icons.play_for_work,
+    ZefyrToolbarAction.center: Icons.format_align_center,
+
     ZefyrToolbarAction.bold: Icons.format_bold,
     ZefyrToolbarAction.italic: Icons.format_italic,
     ZefyrToolbarAction.link: Icons.link,
     ZefyrToolbarAction.unlink: Icons.link_off,
     ZefyrToolbarAction.clipboardCopy: Icons.content_copy,
     ZefyrToolbarAction.openInBrowser: Icons.open_in_new,
-    ZefyrToolbarAction.heading: Icons.format_size,
+//    ZefyrToolbarAction.heading: Icons.format_size,
+    ZefyrToolbarAction.headingLevel3: Icons.title,
     ZefyrToolbarAction.bulletList: Icons.format_list_bulleted,
     ZefyrToolbarAction.numberList: Icons.format_list_numbered,
     ZefyrToolbarAction.code: Icons.code,
@@ -387,6 +393,8 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     if (kDefaultButtonIcons.containsKey(action)) {
       final icon = kDefaultButtonIcons[action];
       final size = kSpecialIconSizes[action];
+      if (action == ZefyrToolbarAction.headingLevel3) {
+      } else if (action == ZefyrToolbarAction.center) {}
       return ZefyrButton.icon(
         action: action,
         icon: icon,
@@ -394,6 +402,7 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
         onPressed: onPressed,
       );
     } else {
+      print('=======action $action');
       final text = kDefaultButtonTexts[action];
       assert(text != null);
       final style = theme.textTheme.caption
