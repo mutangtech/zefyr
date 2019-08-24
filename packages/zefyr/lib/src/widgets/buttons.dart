@@ -212,8 +212,8 @@ class _HeadingButtonState extends State<HeadingButton> {
     final toolbar = ZefyrToolbar.of(context);
     return toolbar.buildButton(
       context,
-      ZefyrToolbarAction.heading,
-      onPressed: showOverlay,
+      ZefyrToolbarAction.headingLevel3,
+//      onPressed: showOverlay,
     );
   }
 
