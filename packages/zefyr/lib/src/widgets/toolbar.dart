@@ -13,6 +13,9 @@ import 'theme.dart';
 
 /// List of all button actions supported by [ZefyrToolbar] buttons.
 enum ZefyrToolbarAction {
+  undo,
+  indent,
+  lineBreak,
   bold,
   italic,
   link,
@@ -250,6 +253,11 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
 
   List<Widget> _buildButtons(BuildContext context) {
     final buttons = <Widget>[
+      //custom
+      buildButton(context, ZefyrToolbarAction.undo),
+      buildButton(context, ZefyrToolbarAction.indent),
+      buildButton(context, ZefyrToolbarAction.lineBreak),
+      
       buildButton(context, ZefyrToolbarAction.bold),
       buildButton(context, ZefyrToolbarAction.italic),
       LinkButton(),
@@ -335,6 +343,9 @@ class _ZefyrButtonListState extends State<ZefyrButtonList> {
 
 class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
   static const kDefaultButtonIcons = {
+    ZefyrToolbarAction.undo: Icons.undo,
+    ZefyrToolbarAction.indent: Icons.format_indent_increase,
+    ZefyrToolbarAction.lineBreak: Icons.play_for_work,
     ZefyrToolbarAction.bold: Icons.format_bold,
     ZefyrToolbarAction.italic: Icons.format_italic,
     ZefyrToolbarAction.link: Icons.link,
