@@ -266,7 +266,7 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
 
 //      buildButton(context, ZefyrToolbarAction.bold),
 //      buildButton(context, ZefyrToolbarAction.italic),
-      InsertLinkButton(),
+//      InsertLinkButton(),
       HeadingButton(),
       buildButton(context, ZefyrToolbarAction.bulletList),
       buildButton(context, ZefyrToolbarAction.numberList),
