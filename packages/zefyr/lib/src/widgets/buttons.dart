@@ -24,12 +24,14 @@ class ZefyrButton extends StatelessWidget {
     @required IconData icon,
     double iconSize,
     this.onPressed,
+    String text,
+    TextStyle textStyle,
   })  : assert(action != null),
         assert(icon != null),
         _icon = icon,
         _iconSize = iconSize,
-        _text = null,
-        _textStyle = null,
+        _text = text,
+        _textStyle = textStyle,
         super();
 
   /// Creates a toolbar button containing text.
@@ -72,7 +74,21 @@ class ZefyrButton extends StatelessWidget {
     final iconColor = (pressedHandler == null)
         ? toolbarTheme.disabledIconColor
         : toolbarTheme.iconColor;
-    if (_icon != null) {
+    if (_icon != null && _text != null) {
+      var style = _textStyle ?? new TextStyle();
+      style = style.copyWith(color: iconColor).copyWith(fontSize: 8.0,fontWeight: FontWeight.w100);
+      return RawZefyrButton(
+        action: action,
+        color: _getColor(editor, toolbarTheme),
+        child: Column(
+          children: <Widget>[
+            new Icon(_icon, size: _iconSize, color: iconColor),
+            new Text(_text, style: style)
+          ],
+        ),
+        onPressed: _getPressedHandler(editor, toolbar),
+      );
+    } else if (_icon != null) {
       return RawZefyrButton.icon(
         action: action,
         icon: _icon,

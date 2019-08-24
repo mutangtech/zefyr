@@ -5,6 +5,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:notus/notus.dart';
 
 import 'buttons.dart';
@@ -372,6 +373,21 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     ZefyrToolbarAction.confirm: Icons.check,
   };
 
+  static const kDefaultButtonNames = {
+    ZefyrToolbarAction.undo: '撤销',
+    ZefyrToolbarAction.indent: '缩进',
+    ZefyrToolbarAction.lineBreak: '换行',
+    ZefyrToolbarAction.center: '居中',
+    ZefyrToolbarAction.link: '链接',
+    ZefyrToolbarAction.headingLevel3: '标题',
+    ZefyrToolbarAction.bulletList: '列表',
+    ZefyrToolbarAction.numberList: '列表',
+    ZefyrToolbarAction.code: '代码',
+    ZefyrToolbarAction.quote: '引用',
+    ZefyrToolbarAction.horizontalRule: '分割线',
+    ZefyrToolbarAction.image: '图片',
+  };
+
   static const kSpecialIconSizes = {
     ZefyrToolbarAction.unlink: 20.0,
     ZefyrToolbarAction.clipboardCopy: 20.0,
@@ -390,29 +406,40 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
   Widget buildButton(BuildContext context, ZefyrToolbarAction action,
       {VoidCallback onPressed}) {
     final theme = Theme.of(context);
+    final textStyle = theme.textTheme.caption
+        .copyWith(fontWeight: FontWeight.bold, fontSize: 14.0);
     if (kDefaultButtonIcons.containsKey(action)) {
       final icon = kDefaultButtonIcons[action];
       final size = kSpecialIconSizes[action];
-      if (action == ZefyrToolbarAction.headingLevel3) {
+      if (action == ZefyrToolbarAction.indent) {
+        onPressed = () {
+          _insertIndent(context);
+        };
       } else if (action == ZefyrToolbarAction.center) {}
       return ZefyrButton.icon(
         action: action,
         icon: icon,
         iconSize: size,
         onPressed: onPressed,
+        textStyle: textStyle,
+        text: kDefaultButtonNames[action],
       );
     } else {
-      print('=======action $action');
       final text = kDefaultButtonTexts[action];
       assert(text != null);
-      final style = theme.textTheme.caption
-          .copyWith(fontWeight: FontWeight.bold, fontSize: 14.0);
       return ZefyrButton.text(
         action: action,
         text: text,
-        style: style,
+        style: textStyle,
         onPressed: onPressed,
       );
     }
+  }
+
+  void _insertIndent(BuildContext context) async {
+    final editor = ZefyrToolbar.of(context).editor;
+    final image = await editor.imageDelegate.pickImage(ImageSource.gallery);
+    if (image != null)
+      editor.formatSelection(NotusAttribute.embed.image(image));
   }
 }
