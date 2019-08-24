@@ -5,9 +5,10 @@ import 'dart:async';
 import 'dart:ui' as ui;
 
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:notus/notus.dart';
 
+import 'button_insert_text.dart';
+import 'button_link.dart';
 import 'buttons.dart';
 import 'scope.dart';
 import 'theme.dart';
@@ -257,13 +258,14 @@ class ZefyrToolbarState extends State<ZefyrToolbar>
   List<Widget> _buildButtons(BuildContext context) {
     final buttons = <Widget>[
       //custom
-      buildButton(context, ZefyrToolbarAction.undo),
-      buildButton(context, ZefyrToolbarAction.indent),
-      buildButton(context, ZefyrToolbarAction.lineBreak),
+//      buildButton(context, ZefyrToolbarAction.undo),
+//      buildButton(context, ZefyrToolbarAction.indent),
+      InsertTextButton(ZefyrToolbarAction.indent),
+      InsertTextButton(ZefyrToolbarAction.lineBreak),
       buildButton(context, ZefyrToolbarAction.center),
 
-      buildButton(context, ZefyrToolbarAction.bold),
-      buildButton(context, ZefyrToolbarAction.italic),
+//      buildButton(context, ZefyrToolbarAction.bold),
+//      buildButton(context, ZefyrToolbarAction.italic),
       LinkButton(),
       HeadingButton(),
       buildButton(context, ZefyrToolbarAction.bulletList),
@@ -411,11 +413,6 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
     if (kDefaultButtonIcons.containsKey(action)) {
       final icon = kDefaultButtonIcons[action];
       final size = kSpecialIconSizes[action];
-      if (action == ZefyrToolbarAction.indent) {
-        onPressed = () {
-          _insertIndent(context);
-        };
-      } else if (action == ZefyrToolbarAction.center) {}
       return ZefyrButton.icon(
         action: action,
         icon: icon,
@@ -434,12 +431,5 @@ class _DefaultZefyrToolbarDelegate implements ZefyrToolbarDelegate {
         onPressed: onPressed,
       );
     }
-  }
-
-  void _insertIndent(BuildContext context) async {
-    final editor = ZefyrToolbar.of(context).editor;
-    final image = await editor.imageDelegate.pickImage(ImageSource.gallery);
-    if (image != null)
-      editor.formatSelection(NotusAttribute.embed.image(image));
   }
 }
