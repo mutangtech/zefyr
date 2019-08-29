@@ -8,10 +8,20 @@ import 'dart:ui' as ui;
 
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:notus/notus.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:notus/notus.dart';
 
 import 'editable_box.dart';
+
+enum ZefyrImageDelegateType {
+  /// Opens up the device camera, letting the user to take a new picture.
+  camera,
+
+  /// Opens the user's photo gallery.
+  gallery,
+
+  http,
+}
 
 abstract class ZefyrImageDelegate<S> {
   /// Builds image widget for specified [imageSource] and [context].
@@ -24,7 +34,9 @@ abstract class ZefyrImageDelegate<S> {
   Future<String> pickImage(S source);
 }
 
-class ZefyrDefaultImageDelegate implements ZefyrImageDelegate<ImageSource> {
+class ZefyrDefaultImageDelegate
+    implements ZefyrImageDelegate<ZefyrImageDelegateType> {
+
   @override
   Widget buildImage(BuildContext context, String imageSource) {
     final file = new File.fromUri(Uri.parse(imageSource));
@@ -33,10 +45,16 @@ class ZefyrDefaultImageDelegate implements ZefyrImageDelegate<ImageSource> {
   }
 
   @override
-  Future<String> pickImage(ImageSource source) async {
-    final file = await ImagePicker.pickImage(source: source);
-    if (file == null) return null;
-    return file.uri.toString();
+  Future<String> pickImage(ZefyrImageDelegateType source) async {
+    String imageUri;
+    if (source == ZefyrImageDelegateType.camera) {
+      File file = await ImagePicker.pickImage(source: ImageSource.camera);
+      imageUri = file.uri.toString();
+    } else if (source == ZefyrImageDelegateType.gallery) {
+      File file = await ImagePicker.pickImage(source: ImageSource.camera);
+      imageUri = file.uri.toString();
+    }
+    return imageUri;
   }
 }
 

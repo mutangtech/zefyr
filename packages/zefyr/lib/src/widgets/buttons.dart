@@ -2,8 +2,8 @@
 // for details. All rights reserved. Use of this source code is governed by a
 // BSD-style license that can be found in the LICENSE file.
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:notus/notus.dart';
+import 'package:zefyr/src/widgets/image.dart';
 
 import 'scope.dart';
 import 'theme.dart';
@@ -268,7 +268,7 @@ class _ImageButtonState extends State<ImageButton> {
     return toolbar.buildButton(
       context,
       ZefyrToolbarAction.image,
-      onPressed: _pickFromGallery,
+      onPressed: showOverlay,
     );
   }
 
@@ -286,21 +286,24 @@ class _ImageButtonState extends State<ImageButton> {
             onPressed: _pickFromCamera),
         toolbar.buildButton(context, ZefyrToolbarAction.galleryImage,
             onPressed: _pickFromGallery),
+        toolbar.buildButton(context, ZefyrToolbarAction.httpImage,
+            onPressed: _pickeFromHttp),
       ],
     );
     return ZefyrToolbarScaffold(body: buttons);
   }
 
-  void _pickFromCamera() async {
-    final editor = ZefyrToolbar.of(context).editor;
-    final image = await editor.imageDelegate.pickImage(ImageSource.camera);
-    if (image != null)
-      editor.formatSelection(NotusAttribute.embed.image(image));
-  }
+  void _pickFromCamera() async => _pickerImage(ZefyrImageDelegateType.camera);
 
-  void _pickFromGallery() async {
-    final editor = ZefyrToolbar.of(context).editor;
-    final image = await editor.imageDelegate.pickImage(ImageSource.gallery);
+  void _pickFromGallery() async => _pickerImage(ZefyrImageDelegateType.gallery);
+
+  void _pickeFromHttp() async => _pickerImage(ZefyrImageDelegateType.http);
+
+  void _pickerImage(ZefyrImageDelegateType type) async {
+    final editor = ZefyrToolbar
+        .of(context)
+        .editor;
+    final image = await editor.imageDelegate.pickImage(type);
     if (image != null)
       editor.formatSelection(NotusAttribute.embed.image(image));
   }
